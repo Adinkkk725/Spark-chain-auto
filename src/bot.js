@@ -14,10 +14,10 @@ function displayBanner() {
 
 (async () => {
   displayBanner();
-  console.log(chalk.green('Starting SparkChain auto bot...'));
+  console.log(chalk.cyan('Starting SparkChain auto bot...'));
 
   // Keep WebSocket connection alive
   await keepWebSocketAlive();
 
-  console.log(chalk.green('SparkChain auto bot finished.'));
+  console.log(chalk.cyan('SparkChain auto bot finished.'));
 })();
