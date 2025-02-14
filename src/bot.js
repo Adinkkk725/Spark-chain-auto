@@ -1,5 +1,3 @@
-### `src/bot.js`
-```javascript name=src/bot.js
 const { keepWebSocketAlive } = require('./tasks');
 
 function displayBanner() {
