@@ -11,5 +11,5 @@ A Node.js bot to keep SparkChain WebSocket connection active by periodically sen
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/sparkchain-auto-bot.git
-   cd sparkchain-auto-bot
+   git clone https://github.com/Adinkkk725/Spark-chain-auto.git
+   cd spark-chain-auto
