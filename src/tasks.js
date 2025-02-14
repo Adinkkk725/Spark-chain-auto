@@ -11,9 +11,14 @@ async function keepWebSocketAlive() {
   ws.on('message', (message) => {
     console.log('Received message:', message);
     try {
-      const data = JSON.parse(message.toString());
-      if (data && data.points) {
-        console.log(`Points earned: ${data.points}`);
+      const messageString = message.toString();
+      if (messageString.startsWith('{') || messageString.startsWith('[')) {
+        const data = JSON.parse(messageString);
+        if (data && data.points) {
+          console.log(`Points earned: ${data.points}`);
+        }
+      } else {
+        console.log('Received non-JSON message:', messageString);
       }
     } catch (error) {
       console.error('Error parsing message:', error);
