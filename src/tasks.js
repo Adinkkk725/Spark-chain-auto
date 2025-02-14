@@ -11,14 +11,16 @@ async function keepWebSocketAlive() {
   ws.on('message', (message) => {
     console.log('Received message:', message);
     try {
-      const messageString = message.toString();
-      if (messageString.startsWith('0') || messageString.startsWith('2') || !messageString.trim()) {
+      const messageString = message.toString('utf-8');
+      if (messageString.startsWith('0') || messageString.startsWith('2')) {
         console.log('Received non-JSON message:', messageString);
-      } else {
+      } else if (messageString.startsWith('{') || messageString.startsWith('[')) {
         const data = JSON.parse(messageString);
         if (data && data.points) {
           console.log(`Points earned: ${data.points}`);
         }
+      } else {
+        console.log('Received unknown message format:', messageString);
       }
     } catch (error) {
       console.error('Error parsing message:', error);
