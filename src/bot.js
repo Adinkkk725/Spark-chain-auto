@@ -1,22 +1,23 @@
 const { keepWebSocketAlive } = require('./tasks');
+const chalk = require('chalk');
 
 function displayBanner() {
-  console.log(`
-  ____  _     _  ____    ____      _   
- / ___|| |__ (_)/ ___|  / ___|__ _| |_ 
- \\___ \\| '_ \\| | |  _  | |   / _\` | __|
-  ___) | | | | | |_| | | |__| (_| | |_ 
- |____/|_| |_|_|\\____|  \\____\\__,_|\\__|
-                                       
-`);
+  console.log(chalk.blue(`
+   ___      _       _     
+  / _ \\__ _| |_ ___| |__  
+ / /_)/ _\` | __/ __| '_ \\ 
+/ ___/ (_| | || (__| | | |
+\\/    \\__,_|\\__\\___|_| |_|
+                          
+`));
 }
 
 (async () => {
   displayBanner();
-  console.log('Starting SparkChain auto bot...');
+  console.log(chalk.green('Starting SparkChain auto bot...'));
 
   // Keep WebSocket connection alive
   await keepWebSocketAlive();
 
-  console.log('SparkChain auto bot finished.');
+  console.log(chalk.green('SparkChain auto bot finished.'));
 })();
