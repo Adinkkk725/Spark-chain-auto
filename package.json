@@ -1,0 +1,14 @@
+{
+  "name": "sparkchain-auto-bot",
+  "version": "1.0.0",
+  "description": "A Node.js bot to keep SparkChain WebSocket connection active and display points earned",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "node src/bot.js"
+  },
+  "author": "Adinkkk725",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.2.3"
+  }
+}
