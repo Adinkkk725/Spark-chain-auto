@@ -11,7 +11,7 @@ async function keepWebSocketAlive() {
   ws.on('message', (message) => {
     console.log('Received message:', message);
     try {
-      const data = JSON.parse(message);
+      const data = JSON.parse(message.toString());
       if (data && data.points) {
         console.log(`Points earned: ${data.points}`);
       }
