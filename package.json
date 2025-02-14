@@ -9,6 +9,6 @@
   "author": "Adinkkk725",
   "license": "MIT",
   "dependencies": {
-    "ws": "^8.2.3"
+    "ws": "^8.12.0"
   }
 }
