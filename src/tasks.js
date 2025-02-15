@@ -15,6 +15,11 @@ async function connectToApi(token) {
     console.log('Connected to API:', response.data);
   } catch (error) {
     console.error('Error connecting to API:', error);
+    if (error.response) {
+      console.error('Status Code:', error.response.status);
+      console.error('Status Text:', error.response.statusText);
+      console.error('Response Data:', error.response.data);
+    }
   }
 }
 
