@@ -1,4 +1,4 @@
-const { keepWebSocketAlive, fetchPointsPeriodically } = require('./tasks');
+const { keepWebSocketAlive } = require('./tasks');
 const fs = require('fs');
 
 function displayBanner() {
@@ -24,9 +24,6 @@ function getToken() {
 
   // Keep WebSocket connection alive
   await keepWebSocketAlive(token);
-
-  // Fetch points periodically
-  fetchPointsPeriodically(token);
 
   console.log('SparkChain auto bot finished.');
 })();
