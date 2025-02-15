@@ -1,9 +1,14 @@
 const WebSocket = require('ws');
-const axios = require('axios');
 
 async function keepWebSocketAlive(token) {
   const url = `wss://ws-v2.sparkchain.ai/socket.io/?token=${token}&device_id=77aa1b6c-70bd-42f0-bbd4-e8d0a9702964&device_version=0.7.0&EIO=4&transport=websocket`;
-  const ws = new WebSocket(url);
+  console.log('Connecting to WebSocket with URL:', url);
+
+  const ws = new WebSocket(url, {
+    headers: {
+      'Origin': 'chrome-extension://jlpniknnodfkbmbgkjelcailjljlecch'
+    }
+  });
 
   ws.on('open', () => {
     console.log('WebSocket connection opened');
@@ -49,23 +54,4 @@ async function keepWebSocketAlive(token) {
   });
 }
 
-async function fetchPointsPeriodically(token) {
-  const apiUrl = 'https://api.sparkchain.ai/v1/points'; // Ganti dengan URL API yang sesuai
-  const headers = {
-    'Authorization': `Bearer ${token}`
-  };
-
-  async function fetchPoints() {
-    try {
-      const response = await axios.get(apiUrl, { headers });
-      const points = response.data.points;
-      console.log(`Fetched points: ${points}`);
-    } catch (error) {
-      console.error('Error fetching points:', error);
-    }
-  }
-
-  setInterval(fetchPoints, 60000); // Fetch points setiap 60 detik
-}
-
-module.exports = { keepWebSocketAlive, fetchPointsPeriodically };
+module.exports = { keepWebSocketAlive };
