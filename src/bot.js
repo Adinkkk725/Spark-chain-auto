@@ -1,4 +1,4 @@
-const { keepWebSocketAlive, connectToApi } = require('./tasks');
+const { keepWebSocketAlive } = require('./tasks');
 const fs = require('fs');
 
 function displayBanner() {
@@ -21,9 +21,6 @@ function getToken() {
   console.log('Starting SparkChain auto bot...');
 
   const token = getToken();
-
-  // Connect to API
-  await connectToApi(token);
 
   // Keep WebSocket connection alive
   await keepWebSocketAlive(token);
