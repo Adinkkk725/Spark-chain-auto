@@ -1,4 +1,5 @@
-const { keepWebSocketAlive } = require('./tasks');
+const { keepWebSocketAlive, connectToApi } = require('./tasks');
+const fs = require('fs');
 
 function displayBanner() {
   console.log(`
@@ -11,12 +12,21 @@ function displayBanner() {
 `);
 }
 
+function getToken() {
+  return fs.readFileSync('token.txt', 'utf-8').trim();
+}
+
 (async () => {
   displayBanner();
   console.log('Starting SparkChain auto bot...');
 
+  const token = getToken();
+
+  // Connect to API
+  await connectToApi(token);
+
   // Keep WebSocket connection alive
-  await keepWebSocketAlive();
+  await keepWebSocketAlive(token);
 
   console.log('SparkChain auto bot finished.');
 })();
