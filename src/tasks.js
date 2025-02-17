@@ -118,7 +118,9 @@ function createConnection(token, proxies, proxyIndex) {
       'Accept-Language': 'en-US,en;q=0.9,id;q=0.8',
       'Sec-WebSocket-Extensions': 'permessage-deflate; client_max_window_bits'
     },
-    agent: agent
+    agent: agent,
+    handshakeTimeout: 10000, // Set handshake timeout to 10 seconds
+    timeout: 30000 // Set connection timeout to 30 seconds
   };
 
   const ws = new WebSocket(wsUrl, wsOptions);
