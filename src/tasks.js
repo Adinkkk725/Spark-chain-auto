@@ -132,19 +132,19 @@ function createConnection(token, proxies, proxyIndex) {
   ws.on('error', (error) => {
     console.error(chalk.magenta(`Error [${token.substring(0, 15)}...]: ${error.message}`));
     ws.close();
-    setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
+    setTimeout(() => createConnection(token, proxies, newProxyIndex), 10000); // Increase retry delay to 10 seconds
   });
 
   ws.on('unexpected-response', (request, response) => {
     console.error(chalk.magenta(`Unexpected server response [${token.substring(0, 15)}...]: ${response.statusCode}`));
     ws.close();
-    setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
+    setTimeout(() => createConnection(token, proxies, newProxyIndex), 10000); // Increase retry delay to 10 seconds
   });
 
   ws.on('close', (code, reason) => {
     const reasonText = reason ? reason.toString() : 'N/A';
     console.log(chalk.blue(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reasonText}`));
-    setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
+    setTimeout(() => createConnection(token, proxies, newProxyIndex), 10000); // Increase retry delay to 10 seconds
   });
 }
 
