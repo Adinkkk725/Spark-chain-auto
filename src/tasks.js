@@ -65,9 +65,9 @@ function getNextProxy(proxies, proxyIndex) {
 
 function handleMessage(ws, data, token) {
   const message = data.toString();
+  console.log(chalk.blue(`Received [${token.substring(0, 15)}...]:`, message));
 
   if (message.startsWith('0')) {
-    console.log(chalk.blue(`Received handshake [${token.substring(0, 15)}...]:`, message));
     const handshake = JSON.parse(message.substring(1));
     ws.pingInterval = handshake.pingInterval;
     ws.pingTimeout = handshake.pingTimeout;
@@ -82,8 +82,6 @@ function handleMessage(ws, data, token) {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send('3');
     }
-  } else {
-    console.log(chalk.blue(`Received [${token.substring(0, 15)}...]:`, message));
   }
 }
 
@@ -94,6 +92,8 @@ function setupPingPong(ws, token) {
   ws.on('message', (data) => {
     handleMessage(ws, data, token);
     messageCount++;
+
+    console.log(chalk.yellow(`Message count for token [${token.substring(0, 15)}...]: ${messageCount}`));
 
     if (!upMessageSent && messageCount >= 10) {
       upMessageSent = true;
