@@ -105,7 +105,7 @@ function setupPingPong(ws, token) {
   });
 }
 
-function createConnection(token, proxies, proxyIndex) {
+function createConnection(token, proxies, proxyIndex, retryCount = 0) {
   const { proxy, newProxyIndex } = getNextProxy(proxies, proxyIndex);
   const agent = getProxyAgent(proxy);
 
@@ -119,7 +119,7 @@ function createConnection(token, proxies, proxyIndex) {
       'Sec-WebSocket-Extensions': 'permessage-deflate; client_max_window_bits'
     },
     agent: agent,
-    handshakeTimeout: 10000, // Set handshake timeout to 10 seconds
+    handshakeTimeout: 15000, // Set handshake timeout to 15 seconds
     timeout: 30000 // Set connection timeout to 30 seconds
   };
 
@@ -134,19 +134,31 @@ function createConnection(token, proxies, proxyIndex) {
   ws.on('error', (error) => {
     console.error(chalk.magenta(`Error [${token.substring(0, 15)}...]: ${error.message}`));
     ws.close();
-    setTimeout(() => createConnection(token, proxies, newProxyIndex), 10000); // Increase retry delay to 10 seconds
+    if (retryCount < 5) {
+      setTimeout(() => createConnection(token, proxies, newProxyIndex, retryCount + 1), 10000); // Increase retry delay to 10 seconds
+    } else {
+      console.error(chalk.red(`Max retries reached for token [${token.substring(0, 15)}...]`));
+    }
   });
 
   ws.on('unexpected-response', (request, response) => {
     console.error(chalk.magenta(`Unexpected server response [${token.substring(0, 15)}...]: ${response.statusCode}`));
     ws.close();
-    setTimeout(() => createConnection(token, proxies, newProxyIndex), 10000); // Increase retry delay to 10 seconds
+    if (retryCount < 5) {
+      setTimeout(() => createConnection(token, proxies, newProxyIndex, retryCount + 1), 10000); // Increase retry delay to 10 seconds
+    } else {
+      console.error(chalk.red(`Max retries reached for token [${token.substring(0, 15)}...]`));
+    }
   });
 
   ws.on('close', (code, reason) => {
     const reasonText = reason ? reason.toString() : 'N/A';
     console.log(chalk.blue(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reasonText}`));
-    setTimeout(() => createConnection(token, proxies, newProxyIndex), 10000); // Increase retry delay to 10 seconds
+    if (retryCount < 5) {
+      setTimeout(() => createConnection(token, proxies, newProxyIndex, retryCount + 1), 10000); // Increase retry delay to 10 seconds
+    } else {
+      console.error(chalk.red(`Max retries reached for token [${token.substring(0, 15)}...]`));
+    }
   });
 }
 
