@@ -130,7 +130,13 @@ function createConnection(token, proxies, proxyIndex) {
   setupPingPong(ws, token);
 
   ws.on('error', (error) => {
-    console.error(chalk.magenta(`Error [${token.substring(0, 15)}...]:`, error.message));
+    console.error(chalk.magenta(`Error [${token.substring(0, 15)}...]: ${error.message}`));
+    ws.close();
+    setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
+  });
+
+  ws.on('unexpected-response', (request, response) => {
+    console.error(chalk.magenta(`Unexpected server response [${token.substring(0, 15)}...]: ${response.statusCode}`));
     ws.close();
     setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
   });
