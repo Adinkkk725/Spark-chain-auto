@@ -96,6 +96,7 @@ function setupPingPong(ws, token) {
     if (!upMessageSent && messageCount >= 10) {
       upMessageSent = true;
       if (ws.readyState === WebSocket.OPEN) {
+        console.log(chalk.green(`Sending "up" message for token: ${token.substring(0, 15)}...`));
         ws.send('42["up",{}]');
       }
     }
@@ -132,8 +133,8 @@ function createConnection(token, proxies, proxyIndex) {
     setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
   });
 
-  ws.on('close', () => {
-    console.log(chalk.yellow(`Disconnected: ${token.substring(0, 15)}...`));
+  ws.on('close', (code, reason) => {
+    console.log(chalk.yellow(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reason ? reason.toString() : 'N/A'}`));
     setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
   });
 }
