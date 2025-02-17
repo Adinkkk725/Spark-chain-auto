@@ -65,9 +65,9 @@ function getNextProxy(proxies, proxyIndex) {
 
 function handleMessage(ws, data, token) {
   const message = data.toString();
-  console.log(chalk.blue(`Received [${token.substring(0, 15)}...]:`, message));
 
   if (message.startsWith('0')) {
+    console.log(chalk.blue(`Received handshake [${token.substring(0, 15)}...]:`, message));
     const handshake = JSON.parse(message.substring(1));
     ws.pingInterval = handshake.pingInterval;
     ws.pingTimeout = handshake.pingTimeout;
@@ -82,6 +82,8 @@ function handleMessage(ws, data, token) {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send('3');
     }
+  } else {
+    console.log(chalk.blue(`Received [${token.substring(0, 15)}...]:`, message));
   }
 }
 
@@ -134,7 +136,8 @@ function createConnection(token, proxies, proxyIndex) {
   });
 
   ws.on('close', (code, reason) => {
-    console.log(chalk.blue(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reason ? reason.toString() : 'N/A'}`));
+    const reasonText = reason ? reason.toString() : 'N/A';
+    console.log(chalk.blue(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reasonText}`));
     setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
   });
 }
