@@ -23,7 +23,7 @@ function parseProxy(proxyString) {
     }
     return { protocol: protocol.toLowerCase(), host, port: parseInt(port) };
   } catch (error) {
-    console.error(chalk.red('Error parsing proxy:', proxyString, error.message));
+    console.error(chalk.magenta('Error parsing proxy:', proxyString, error.message));
     return null;
   }
 }
@@ -36,7 +36,7 @@ function loadProxies() {
       .map(proxy => parseProxy(proxy))
       .filter(proxy => proxy !== null);
   } catch (error) {
-    console.log(chalk.yellow('No proxies found, using direct connection'));
+    console.log(chalk.cyan('No proxies found, using direct connection'));
     return [];
   }
 }
@@ -65,7 +65,7 @@ function getNextProxy(proxies, proxyIndex) {
 
 function handleMessage(ws, data, token) {
   const message = data.toString();
-  console.log(chalk.cyan(`Received [${token.substring(0, 15)}...]:`, message));
+  console.log(chalk.blue(`Received [${token.substring(0, 15)}...]:`, message));
 
   if (message.startsWith('0')) {
     const handshake = JSON.parse(message.substring(1));
@@ -128,13 +128,13 @@ function createConnection(token, proxies, proxyIndex) {
   setupPingPong(ws, token);
 
   ws.on('error', (error) => {
-    console.error(chalk.red(`Error [${token.substring(0, 15)}...]:`, error.message));
+    console.error(chalk.magenta(`Error [${token.substring(0, 15)}...]:`, error.message));
     ws.close();
     setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
   });
 
   ws.on('close', (code, reason) => {
-    console.log(chalk.yellow(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reason ? reason.toString() : 'N/A'}`));
+    console.log(chalk.blue(`Disconnected: ${token.substring(0, 15)}... Code: ${code}, Reason: ${reason ? reason.toString() : 'N/A'}`));
     setTimeout(() => createConnection(token, proxies, newProxyIndex), 5000);
   });
 }
